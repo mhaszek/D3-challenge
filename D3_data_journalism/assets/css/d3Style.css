@@ -21,6 +21,7 @@
 .inactive:hover {
   fill: #000;
   cursor: pointer;
+  font-weight: bold;
 }
 
 /* font size dependent on radius, see app.js */
@@ -28,7 +29,7 @@
   font-family: sans-serif;
   fill: #fff;
   text-anchor: middle;
-  font-size: 12px;
+  /* font-size: 12px; */
 }
 
 .stateCircle {
@@ -62,6 +63,7 @@
   .aText {
     font-size: 14px;
   }
+
 }
 
 @media screen and (max-width: 400px) {
