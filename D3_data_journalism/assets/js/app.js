@@ -1,9 +1,8 @@
 // @TODO: YOUR CODE HERE!
+
 // Initial Params
 var chosenXAxis = "poverty";
 var chosenYAxis = "healthcare";
-
-
 
 function makeResponsive() {
 
@@ -14,7 +13,6 @@ function makeResponsive() {
   if (!svgArea.empty()) {
     svgArea.remove();
   }
-
 
   var parentDiv = d3.select('#scatter').node();
   var parentDivSize = parentDiv.getBoundingClientRect().width; 
@@ -46,7 +44,7 @@ function makeResponsive() {
     .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
-///      FUNCTIONS TO MAKE THE AXIS AND CIRCLES RESPONSIVE   ///////////////
+///     FUNCTIONS TO MAKE THE AXIS AND CIRCLES RESPONSIVE   ///////////////
 
 
 // function used for updating x-scale var upon click on axis label
@@ -96,8 +94,6 @@ function renderYAxes(newYScale, yAxis) {
 
 }
 
-
-
 // function used for updating circles group with a transition to
 // new circles
 function renderCircles(testgs, newXScale, chosenXAxis, newYScale, chosenYAxis) {
@@ -119,6 +115,12 @@ function renderCircles(testgs, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
+
+  var tooltips = d3.select("body").select(".tooltip");
+
+  if (!tooltips.empty()) {
+    tooltips.remove();
+  }
 
   var xlabel;
   var xsuffix;
@@ -153,7 +155,6 @@ function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
       break;
   }
 
-
   var toolTip = d3.tip()
     .attr("class", "tooltip")
     .offset([80, -60])
@@ -174,8 +175,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
   return testgs;
 }
 
-
-///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 
   // Retrieve data from the CSV file and execute everything below
   d3.csv("assets/data/data.csv").then(function(censusData, err) {
@@ -208,7 +208,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
       testgs.append("circle")
         .attr("cx", data => xLinearScale(data[chosenXAxis]))
         .attr("cy", data => yLinearScale(data[chosenYAxis]))
-        .attr("r", width*0.02)
+        .attr("r", width*0.015)
         .classed("stateCircle", true);
 
       testgs.append("text")
@@ -216,7 +216,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
         .attr("y", data => yLinearScale(data[chosenYAxis])+4)
         .text(data => data.abbr)
         .classed("stateText", true)
-        .style("font-size", width*0.02+1 + "px");  
+        .style("font-size", width*0.015+1 + "px");  
         
       // testgs.exit().remove();
       
@@ -242,26 +242,33 @@ function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
       var povertyLabel = xlabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", width*0.02+10)
-        .attr("value", "poverty") // value to grab for event listener
-        .classed("active", true)
+        .attr("value", "poverty") 
         .text("In poverty (%)")
         .style("font-size", width*0.02+5 + "px");
 
       var ageLabel = xlabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", width*0.04+20)
-        .attr("value", "age") // value to grab for event listener
-        .classed("inactive", true)
+        .attr("value", "age") 
         .text("Age (Median)")
         .style("font-size", width*0.02+5 + "px"); 
 
       var incomeLabel = xlabelsGroup.append("text")
         .attr("x", 0)
         .attr("y", width*0.06+30)
-        .attr("value", "income") // value to grab for event listener
-        .classed("inactive", true)
+        .attr("value", "income") 
         .text("Household Income (Median)")
         .style("font-size", width*0.02+5 + "px"); 
+
+      xlabelsGroup.selectAll('text').each(function(d,i) { 
+
+        if (d3.select(this).attr("value") === chosenXAxis){
+          d3.select(this).classed("active", true);
+        } else {
+          d3.select(this).classed("inactive", true);
+        }; 
+                
+      });
 
       // Create group for three y-axis labels
 
@@ -271,26 +278,33 @@ function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
       var healthcareLabel = ylabelsGroup.append("text")
         .attr("y", 0 - margin.left*0.4)
         .attr("x", 0 - (height / 2))
-        .attr("value", "healthcare") // value to grab for event listener
-        .classed("active", true)
+        .attr("value", "healthcare")
         .text("Lacks healthcare (%)")
         .style("font-size", width*0.02+5 + "px"); 
 
       var smokesLabel = ylabelsGroup.append("text")
         .attr("y", 0 - margin.left*0.6)
         .attr("x", 0 - (height / 2))
-        .attr("value", "smokes") // value to grab for event listener
-        .classed("inactive", true)
+        .attr("value", "smokes")
         .text("Smokes (%)")
         .style("font-size", width*0.02+5 + "px"); 
 
       var obesityLabel = ylabelsGroup.append("text")
         .attr("y", 0 - margin.left*0.8)
         .attr("x", 0 - (height / 2))
-        .attr("value", "obesity") // value to grab for event listener
-        .classed("inactive", true)
+        .attr("value", "obesity")
         .text("Obesee (%)")
         .style("font-size", width*0.02+5 + "px"); 
+
+      ylabelsGroup.selectAll('text').each(function(d,i) { 
+
+        if (d3.select(this).attr("value") === chosenYAxis){
+          d3.select(this).classed("active", true);
+        } else {
+          d3.select(this).classed("inactive", true);
+        }; 
+                  
+      });
 
       // x axis labels event listener
       xlabelsGroup.selectAll("text")
@@ -412,18 +426,13 @@ function updateToolTip(chosenXAxis, chosenYAxis, testgs) {
           }
         });
 
-
-
   }).catch(function(error) {
     console.log(error);
   });
-
-
 
 }
 
 makeResponsive();
 
-// Event listener for window resize.
-// When the browser window is resized, makeResponsive() is called.
+// Create event listener for window resize
 d3.select(window).on("resize", makeResponsive);
