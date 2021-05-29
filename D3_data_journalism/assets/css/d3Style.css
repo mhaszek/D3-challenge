@@ -1,5 +1,5 @@
 #scatter {
-  margin-bottom: 15px;
+  padding-bottom: 15px;
 }
 
 .aText {
@@ -38,10 +38,6 @@
 .stateCircle {
   fill: #89bdd3;
   stroke: #e3e3e3;
-}
-
-.stateCircle:hover {
-  stroke: #000;
 }
 
 .chart {
