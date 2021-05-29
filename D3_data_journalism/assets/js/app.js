@@ -104,7 +104,7 @@ function makeResponsive() {
       .transition()
       .duration(500)
       .attr("x", d => newXScale(d[chosenXAxis]))
-      .attr("y", data => newYScale(data[chosenYAxis])+4);
+      .attr("y", data => newYScale(data[chosenYAxis]));
 
     return circlesArea;
   }
@@ -214,7 +214,8 @@ function makeResponsive() {
     // Append the text inside circles
     circlesArea.append("text")
       .attr("x", data => xLinearScale(data[chosenXAxis]))
-      .attr("y", data => yLinearScale(data[chosenYAxis])+4)
+      .attr("y", data => yLinearScale(data[chosenYAxis]))
+      .attr("alignment-baseline", "central")
       .text(data => data.abbr)
       .classed("stateText", true)
       .style("font-size", width*0.015+1 + "px");  
